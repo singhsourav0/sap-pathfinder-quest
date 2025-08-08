@@ -22,16 +22,16 @@ const Index = () => {
             <p className="text-lg text-muted-foreground">
               Learn the fundamentals of SAP, understand why it matters, and test yourself with a concise 20-question quiz.
             </p>
-            <div className="flex flex-wrap gap-3">
-              <Button asChild variant="hero" size="lg" className="hover-scale">
-                <Link to="/test" aria-label="Start the SAP quiz">Start the Quiz</Link>
-              </Button>
-              <Button asChild variant="outline" size="lg" className="hover-scale">
-                <Link to="/about" aria-label="Learn about SAP">Why Learn SAP?</Link>
-              </Button>
-              <Button asChild variant="secondary" size="lg" className="hover-scale">
-                <Link to="/auth" aria-label="Sign in or Sign up">Sign in / Sign up</Link>
-              </Button>
+            <div className="flex flex-wrap gap-3 relative z-50">
+              <Link to="/test" className="inline-flex items-center justify-center h-11 px-8 rounded-md text-sm font-medium bg-gradient-primary text-primary-foreground shadow-[var(--shadow-elegant)] hover:brightness-110 transition-all">
+                Start the Quiz
+              </Link>
+              <Link to="/about" className="inline-flex items-center justify-center h-11 px-8 rounded-md text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-all">
+                Why Learn SAP?
+              </Link>
+              <Link to="/auth" className="inline-flex items-center justify-center h-11 px-8 rounded-md text-sm font-medium bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-all">
+                Sign in / Sign up
+              </Link>
             </div>
           </div>
           <div className="relative rounded-xl overflow-hidden shadow-[var(--shadow-elegant)] animate-scale-in">
