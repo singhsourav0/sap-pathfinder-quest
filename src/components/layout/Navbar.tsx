@@ -30,6 +30,9 @@ const Navbar = () => {
               {item.label}
             </NavLink>
           ))}
+          <Button asChild variant="outline" size="sm">
+            <Link to="/auth">Login</Link>
+          </Button>
           <Button asChild variant="hero" size="sm">
             <Link to="/test">Start Quiz</Link>
           </Button>
@@ -55,6 +58,11 @@ const Navbar = () => {
                 {item.label}
               </Link>
             ))}
+            <Button asChild variant="outline" size="sm" className="w-full">
+              <Link to="/auth" onClick={() => setOpen(false)}>
+                Login
+              </Link>
+            </Button>
             <Button asChild variant="hero" size="sm" className="w-full">
               <Link to="/test" onClick={() => setOpen(false)}>
                 Start Quiz

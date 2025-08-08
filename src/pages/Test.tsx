@@ -1,10 +1,13 @@
 import { Helmet } from "react-helmet-async";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { sapQuiz, type QuizQuestion } from "@/data/sap-quiz";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 
 const Test = () => {
+  const navigate = useNavigate();
   const questions = useMemo<QuizQuestion[]>(() => sapQuiz, []);
   const [answers, setAnswers] = useState<Record<number, number | null>>(
     Object.fromEntries(questions.map((q) => [q.id, null]))
@@ -12,27 +15,50 @@ const Test = () => {
   const [submitted, setSubmitted] = useState(false);
   const total = questions.length;
 
+  const [userId, setUserId] = useState<string | null>(null);
+  useEffect(() => {
+    // Require auth to take the quiz; redirect if not signed in
+    supabase.auth.getSession().then(({ data }) => {
+      const uid = data.session?.user?.id ?? null;
+      setUserId(uid);
+      if (!uid) {
+        toast({ title: "Please sign in", description: "Login to take the quiz and save your score." });
+        navigate("/auth");
+      }
+    });
+  }, [navigate]);
+
   const score = useMemo(() =>
     Object.entries(answers).reduce((acc, [id, idx]) => {
       const q = questions.find((x) => x.id === Number(id));
       return acc + (q && idx === q.answerIndex ? 1 : 0);
     }, 0), [answers, questions]);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (Object.values(answers).some((v) => v === null)) {
       toast({ title: "Incomplete", description: "Please answer all questions." });
       return;
     }
     setSubmitted(true);
 
-    // Temporary local save; will switch to Supabase once connected
     try {
-      const results = JSON.parse(localStorage.getItem("sap-quiz-results") || "[]");
-      results.push({ score, total, date: new Date().toISOString() });
-      localStorage.setItem("sap-quiz-results", JSON.stringify(results));
-      toast({ title: "Score saved locally", description: `You scored ${score}/${total}. Connect backend to save permanently.` });
-    } catch {
-      // ignore
+      if (userId) {
+        const { error } = await (supabase as any).from("quiz_scores").insert({
+          user_id: userId,
+          score,
+          total,
+        });
+        if (error) throw error;
+        toast({ title: "Score saved", description: `You scored ${score}/${total}.` });
+      } else {
+        // Fallback local save (shouldn't happen because of redirect)
+        const results = JSON.parse(localStorage.getItem("sap-quiz-results") || "[]");
+        results.push({ score, total, date: new Date().toISOString() });
+        localStorage.setItem("sap-quiz-results", JSON.stringify(results));
+        toast({ title: "Saved locally", description: `You scored ${score}/${total}.` });
+      }
+    } catch (e: any) {
+      toast({ title: "Could not save score", description: e.message });
     }
   };
 

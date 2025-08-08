@@ -29,6 +29,9 @@ const Index = () => {
               <Button asChild variant="outline" size="lg" className="hover-scale">
                 <Link to="/about" aria-label="Learn about SAP">Why Learn SAP?</Link>
               </Button>
+              <Button asChild variant="secondary" size="lg" className="hover-scale">
+                <Link to="/auth" aria-label="Sign in or Sign up">Sign in / Sign up</Link>
+              </Button>
             </div>
           </div>
           <div className="relative rounded-xl overflow-hidden shadow-[var(--shadow-elegant)] animate-scale-in">
@@ -55,8 +58,28 @@ const Index = () => {
           </article>
           <article className="rounded-lg border bg-card p-6 shadow-sm hover:shadow-md transition-shadow animate-fade-in">
             <h2 className="text-xl font-semibold mb-2">Track</h2>
-            <p className="text-muted-foreground">Scores will be saved once backend is connected.</p>
+            <p className="text-muted-foreground">Scores are saved to your account when signed in.</p>
           </article>
+        </div>
+      </section>
+
+      <section className="relative overflow-hidden py-12">
+        <div className="absolute inset-0 bg-gradient-primary opacity-10" aria-hidden="true" />
+        <div className="container">
+          <div className="rounded-xl border bg-card/70 backdrop-blur p-6 shadow-[var(--shadow-elegant)] animate-enter">
+            <h2 className="text-2xl font-semibold mb-2">Sponsored by AI4S Pro</h2>
+            <p className="text-muted-foreground mb-4">
+              AI4S Pro empowers learners and teams with practical AI solutions and training. Explore tools, guides, and resources to supercharge your SAP and AI journey.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Button asChild variant="hero">
+                <a href="https://ai4spro.com/" target="_blank" rel="noreferrer" aria-label="Visit AI4S Pro website">Visit AI4SPro.com</a>
+              </Button>
+              <Button asChild variant="outline">
+                <Link to="/auth">Sign in to save scores</Link>
+              </Button>
+            </div>
+          </div>
         </div>
       </section>
     </main>
